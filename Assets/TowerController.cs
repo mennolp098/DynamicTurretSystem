@@ -59,6 +59,7 @@ public class TowerController : MonoBehaviour {
 	void attack() 
 	{
 		attackTime = Time.time + attackCooldown;
-		Instantiate (bullet, spawnpoint.position, spawnpoint.rotation);
+		GameObject newBullet = Instantiate (bullet, spawnpoint.position, spawnpoint.rotation) as GameObject;
+		newBullet.transform.parent = GameObject.FindGameObjectWithTag("Bullets").transform;
 	}
 }
