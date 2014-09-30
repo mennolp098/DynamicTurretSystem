@@ -4,12 +4,12 @@ using System.Collections.Generic;
 using System;
 
 public class TowerController : MonoBehaviour {
-	public float attackCooldown = 1.0f;
+	public float shootCooldown = 1.0f;
 	public float attackDamage = 10.0f;
 	public float rotationSpeed;
 
 	private List<EnemyBehavior> enemyScripts = new List<EnemyBehavior>();
-	private float attackTime = 0f;
+	private float shootCoolDown = 0f;
 
 	public GameObject bullet;
 	public Transform spawnpoint;
@@ -24,9 +24,9 @@ public class TowerController : MonoBehaviour {
 					Vector3 relativePos = enemyScripts[0].thisTransform.position - transform.position;
 					Quaternion enemyLookAt = Quaternion.LookRotation(relativePos);
 					this.transform.rotation = Quaternion.Slerp(transform.rotation, enemyLookAt, Time.deltaTime * rotationSpeed);
-					if (Time.time > attackTime) 
+					if (Time.time > shootCoolDown) 
 					{
-						attack ();
+						Shoot ();
 					}
 				}
 			}
@@ -56,9 +56,9 @@ public class TowerController : MonoBehaviour {
 			enemyScripts.Sort();
 		}
 	}
-	void attack() 
+	void Shoot() 
 	{
-		attackTime = Time.time + attackCooldown;
+		shootCoolDown = Time.time + shootCooldown;
 		GameObject newBullet = Instantiate (bullet, spawnpoint.position, spawnpoint.rotation) as GameObject;
 		newBullet.transform.parent = GameObject.FindGameObjectWithTag("Bullets").transform;
 	}

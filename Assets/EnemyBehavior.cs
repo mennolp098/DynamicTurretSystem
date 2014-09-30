@@ -5,7 +5,7 @@ using System;
 
 public class EnemyBehavior : MonoBehaviour, IComparable<EnemyBehavior> {
 	protected float speed = 0.03f;
-	protected float health = 10;
+	public float health = 10;
 	private GameObject target;
 	private float counter = 1;
 	private DateTime TimeAdded;

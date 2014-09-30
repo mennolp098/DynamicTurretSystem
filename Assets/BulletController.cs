@@ -4,6 +4,7 @@ using System.Collections;
 public class BulletController : MonoBehaviour {
 	public float destroyTime;
 	public float speed;
+	public GameObject explosion;
 	// Use this for initialization
 	void Start () 
 	{
@@ -15,6 +16,7 @@ public class BulletController : MonoBehaviour {
 		{
 			float _dmg = GameObject.FindGameObjectWithTag("Player").GetComponent<TowerController>().attackDamage;
 			other.gameObject.GetComponent<EnemyBehavior>().getDmg(_dmg);
+			Instantiate(explosion,transform.position,transform.rotation);
 			Destroy(this.gameObject);
 		}
 	}
