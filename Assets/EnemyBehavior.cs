@@ -5,26 +5,35 @@ using System;
 
 public class EnemyBehavior : MonoBehaviour, IComparable<EnemyBehavior> {
 	protected float speed = 0.03f;
-	public float health = 10;
 	private GameObject target;
 	private float counter = 1;
 	private DateTime TimeAdded;
 
+	public bool isOnStage;
+	public float health = 10;
 	public Transform thisTransform;
 	public int sort;
 	public int CompareTo(EnemyBehavior other)
 	{
-		if(other.sort == this.sort)
+		if(this.health < other.health)
 		{
-			return this.TimeAdded.CompareTo(other.TimeAdded);
+			return this.health.CompareTo(other.health);
+		} 
+		else
+		{
+			if(other.sort == this.sort)
+			{
+				return this.TimeAdded.CompareTo(other.TimeAdded);
+			}
+			return other.sort.CompareTo(this.sort);
 		}
-		return other.sort.CompareTo(this.sort);
 	}
 
 	protected virtual void Start () {
 		target = GameObject.Find ("Waypoint-1");
 		thisTransform = this.transform;
 		TimeAdded = DateTime.Now;
+		isOnStage = true;
 	}
 	void Update () {
 		if(target)
@@ -37,6 +46,10 @@ public class EnemyBehavior : MonoBehaviour, IComparable<EnemyBehavior> {
 				var newWaypointName = "Waypoint-" + counter;
 				GameObject newWaypoint = GameObject.Find(newWaypointName);
 				target = newWaypoint;
+				if(target == null)
+				{
+					getDmg(1000);
+				}
 			}
 		}
 	}
@@ -45,12 +58,8 @@ public class EnemyBehavior : MonoBehaviour, IComparable<EnemyBehavior> {
 		health -= dmg;
 		if(health <= 0)
 		{
-			GameObject[] towers = GameObject.FindGameObjectsWithTag("Player");
-			foreach(GameObject tower in towers)
-			{
-				tower.GetComponent<TowerController>().removeTarget(this.gameObject);
-			}
 			Destroy(this.gameObject);
+			isOnStage = false;
 		}
 	}
 }

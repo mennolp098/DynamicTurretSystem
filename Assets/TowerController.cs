@@ -29,30 +29,34 @@ public class TowerController : MonoBehaviour {
 						Shoot ();
 					}
 				}
+				if(!enemyScripts[i].isOnStage)
+				{
+					removeTarget(enemyScripts[i]);
+				}
 			}
 		}
-
 	}
-	public void removeTarget(GameObject other)
+
+	public void removeTarget(EnemyBehavior script)
 	{
-		if(enemyScripts.Contains(other.GetComponent<EnemyBehavior>()))
-		{
-			enemyScripts.Remove(other.GetComponent<EnemyBehavior>());
-		}
+		enemyScripts.Remove(script);
+		enemyScripts.Sort();
 	}
 	void OnTriggerEnter(Collider other) 
 	{
+		EnemyBehavior enemyScript = other.GetComponent<EnemyBehavior> ();
 		if(other.transform.tag == "Enemy")
 		{
-			enemyScripts.Add(other.GetComponent<EnemyBehavior>());
+			enemyScripts.Add(enemyScript);
 			enemyScripts.Sort();
 		}
 	}
 	void OnTriggerExit(Collider other) 
 	{
-		if(enemyScripts.Contains(other.GetComponent<EnemyBehavior>()))
+		EnemyBehavior enemyScript = other.GetComponent<EnemyBehavior> ();
+		if(enemyScripts.Contains(enemyScript))
 		{
-			enemyScripts.Remove(other.GetComponent<EnemyBehavior>());
+			enemyScripts.Remove(enemyScript);
 			enemyScripts.Sort();
 		}
 	}
